@@ -1,25 +1,35 @@
+const checkTranscript = require('./controllers/checkTranscript');
+const createTranscript = require('./controllers/createTranscript');
+
+//making connection wtih mongodb
 const mongoconnect = require("./connect/mongo");
-mongoconnect().then(res => console.log(res));
+mongoconnect();
+
+//setting up express server
+const express = require("express");
+const app = express();
+const PORT = 4000;
+app.listen(PORT);
+
+//setting up middlewares
+app.use(express.json());
+app.use((req, res, next) => {
+   console.log(req.method + ":" + req.url + "\n");
+   next();
+});
+
+checkTranscript("https://www.youtube.com/watch?v=xVgtcvw7P9A").then(res => {
+   if(res === false){
+      createTranscript("https://www.youtube.com/watch?v=xVgtcvw7P9A");
+   }
+   else{
+      console.log("Found the transcript for the given URL");
+   }
+});
 
 
-// axios
-//    .post(
-//       "https://api.openai.com/v1/audio/transcriptions",
-//       {
-//          model: model,
-//          file: fs.createReadStream(filepath),
-//       },
-//       {
-//          headers: {
-//             Authorization: `Bearer ${OPENAI_API_KEY}`,
-//             "Content-Type": `multipart/form-data`,
-//          },
-//       }
-//    )
-//    .then((res) => {
-//       const transcript = res.data.text;
-//       console.log(transcript);
-//    })
-//    .catch((err) => {
-//       console.log(err);
-// });
+
+
+app.get('/', (req,res) =>{
+   res.send("hello world");
+})
