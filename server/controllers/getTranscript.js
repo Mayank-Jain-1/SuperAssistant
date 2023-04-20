@@ -1,8 +1,8 @@
 const Transcript = require("../models/transcript");
 const mongoconnect = require("../connect/mongo");
-mongoconnect();
 
 const getTranscript = async (audioURL) => {
+   await mongoconnect();
    const res = await Transcript.findOne({
       audioURL: audioURL,
    })

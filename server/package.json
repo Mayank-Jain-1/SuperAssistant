@@ -17,8 +17,11 @@
     "chromadb": "^1.4.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "graphql": "^16.6.0",
     "langchain": "^0.0.59",
     "mongoose": "^7.0.4",
-    "weaviate-client": "^2.14.5"
+    "weaviate": "^0.0.14",
+    "weaviate-client": "^2.14.5",
+    "weaviate-ts-client": "^1.0.0"
   }
 }
