@@ -27,16 +27,16 @@ const createTranscript = async (audioURL, path) => {
                audioURL: audioURL,
                transcriptText: res.data.text,
             });
-            const res = await newTranscript
+            const response = await newTranscript
                .save()
-               .then((res) => {
+               .then(() => {
                   return true;
                })
                .catch((err) =>{
                   console.error(err);
                   return false;
                } );
-            return res
+            return response
          }
       })
       .catch((err) => {
