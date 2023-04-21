@@ -1,10 +1,5 @@
-const { WeaviateStore } = require("langchain/vectorstores/weaviate");
 const getTranscript = require("../controllers/getTranscript");
 const split = require("../controllers/textSplitter");
-const { ChatVectorDBQAChain } = require("langchain/chains");
-const { OpenAI } = require("langchain/llms/openai");
-const { OpenAIEmbeddings } = require("langchain/embeddings/openai");
-console.log(process.env.OPENAI_API_KEY);
 const client = require("../connect/weaviate");
 
 const classObj = {

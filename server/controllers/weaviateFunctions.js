@@ -1,4 +1,3 @@
-const dotenv = require("dotenv").config();
 const client = require("../connect/weaviate");
 const getTranscript = require("./getTranscript");
 const split = require("./textSplitter");
@@ -38,7 +37,7 @@ const classExist = async (className) => {
    return res;
 };
 
-const createClass = (name, classObj) => {
+const createClass = async (name, classObj) => {
    if (!name && !classObj) {
       classObj = defaultClass;
    } else if (name && !classObj) {
@@ -60,12 +59,12 @@ const createClass = (name, classObj) => {
          ],
       };
    }
-   client.schema
+   await client.schema
       .classCreator()
       .withClass(classObj)
       .do()
       .then((res) => {
-         console.log(res);
+         console.log("Created the Class in weaviate cloud server");
       })
       .catch((err) => {
          console.error(err);
@@ -79,8 +78,8 @@ const checkEmbeddingsExist = (name) => {
       .withFields("content {count}")
       .do()
       .then((res) => {
-         console.log(JSON.stringify(res, null, 2));
          const count = res.data.Aggregate[name][0].content.count;
+         console.log(`Found ${count} objects in this Class`);
          if (count > 0) return true;
          else return false;
       })
@@ -108,7 +107,11 @@ const addBatch = async (className, url) => {
    });
    myclient
       .do()
-      .then((res) => console.log(res))
+      .then((res) =>
+         console.log(
+            "Added Batch to the class in weaviate cloud server successfully"
+         )
+      )
       .catch((err) => console.log(err));
 };
 
