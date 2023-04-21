@@ -20,7 +20,6 @@ const createDBQAchain = async (className, property) => {
 
 const getAnswer = async (dbqachain, query) => {
    const res = await dbqachain._call({ question: query, chat_history: [] });
-   console.log(res.text);
    return res.text;
 };
 
