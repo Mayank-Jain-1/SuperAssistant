@@ -4,17 +4,17 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const filepath = path.join(__dirname, "../assets/guitar.mp3");
 const model = "whisper-1";
 const Transcript = require("../models/transcript");
 
-function createTranscript() {
+function createTranscript(audioURL, path) {
+
    axios
       .post(
          "https://api.openai.com/v1/audio/transcriptions",
          {
             model: model,
-            file: fs.createReadStream(filepath),
+            file: fs.createReadStream(path),
          },
          {
             headers: {
@@ -26,7 +26,7 @@ function createTranscript() {
       .then((res) => {
          if (res.status === 200) {
             const newTranscript = new Transcript({
-               audioURL: "https://www.youtube.com/watch?v=xVgtcvw7P9A",
+               audioURL: audioURL,
                transcriptText: res.data.text,
             });
             newTranscript
