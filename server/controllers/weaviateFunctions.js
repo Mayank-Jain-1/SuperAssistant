@@ -1,3 +1,4 @@
+const dotenv = require("dotenv").config();
 const client = require("../connect/weaviate");
 const getTranscript = require("./getTranscript");
 const split = require("./textSplitter");
@@ -18,18 +19,6 @@ const defaultClass = {
          name: "content",
       },
    ],
-};
-
-const getSchema = () => {
-   client.schema
-      .getter()
-      .do()
-      .then((res) => {
-         console.log(res);
-      })
-      .catch((err) => {
-         console.error(err);
-      });
 };
 
 const classExist = async (className) => {
@@ -90,6 +79,7 @@ const checkEmbeddingsExist = (name) => {
       .withFields("content {count}")
       .do()
       .then((res) => {
+         console.log(JSON.stringify(res, null, 2));
          const count = res.data.Aggregate[name][0].content.count;
          if (count > 0) return true;
          else return false;
@@ -101,35 +91,25 @@ const checkEmbeddingsExist = (name) => {
    return res;
 };
 
-const addBatch = async (batch) => {
-   let myclient = client.batch.objectsBatcher();
-   batch.forEach((object) => {
-      myclient = myclient.withObject(object);
-   });
-   myclient
-      .do()
-      .then((res) => {
-         console.log(res);
-      })
-      .catch((err) => {
-         console.error(err);
-      });
-};
-
-(async () => {
-   const transcript = await getTranscript(
-      "https://www.youtube.com/watch?v=xVgtcvw7P9A"
-   );
+const addBatch = async (className, url) => {
+   const transcript = await getTranscript(url);
    const splitted_text = await split(transcript);
    const batch = splitted_text.map((content, index) => {
       return {
-         class: "Temp0",
+         class: className,
          properties: {
             content: content,
          },
       };
    });
-   addBatch(batch);
-})();
+   let myclient = client.batch.objectsBatcher();
+   batch.map((obj) => {
+      myclient = myclient.withObject(obj);
+   });
+   myclient
+      .do()
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+};
 
-module.exports = { classExist, createClass, checkEmbeddingsExist };
+module.exports = { classExist, createClass, checkEmbeddingsExist, addBatch };

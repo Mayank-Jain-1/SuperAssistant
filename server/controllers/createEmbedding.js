@@ -4,7 +4,7 @@ const split = require("../controllers/textSplitter");
 const { ChatVectorDBQAChain } = require("langchain/chains");
 const { OpenAI } = require("langchain/llms/openai");
 const { OpenAIEmbeddings } = require("langchain/embeddings/openai");
-
+console.log(process.env.OPENAI_API_KEY);
 const client = require("../connect/weaviate");
 
 const classObj = {
@@ -72,7 +72,7 @@ const getClassItemsLength = (name) => {
       .then((res) => {
          const response = JSON.stringify(res, null, 2);
          const count = res.data.Aggregate[name][0].content.count;
-         if(count > 0) return true;
+         if (count > 0) return true;
       })
       .catch((err) => {
          console.error(JSON.stringify(err, null, 2));
@@ -100,32 +100,25 @@ const addObject = () => {
 
 const addBatch = async () => {
    const transcript = await getTranscript(
-      "https://www.youtube.com/watch?v=xVgtcvw7P9A"
+      "https://www.youtube.com/watch?v=oL1uem6-3m4"
    );
    const splitted_text = await split(transcript);
    const batch = splitted_text.map((content, index) => {
       return {
-         class: "Paragraph",
+         class: "Finalpara",
          properties: {
             content: content,
          },
       };
    });
-   client.batch
-      .objectsBatcher()
-      .withObject(batch[0])
-      .withObject(batch[1])
-      .withObject(batch[2])
-      .withObject(batch[3])
-      .withObject(batch[4])
+   let myclient = client.batch.objectsBatcher();
+   batch.map((obj) => {
+      myclient = myclient.withObject(obj);
+   });
+   myclient
       .do()
-      .then((res) => {
-         console.log(res);
-         // getall();
-      })
-      .catch((err) => {
-         console.error(err);
-      });
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 };
 
 const createVectorStore = async () => {
@@ -149,10 +142,10 @@ const getAnswer = async (dbqachain, query) => {
 };
 ////////////////////
 
-getSchema();
+// getSchema();
 // create()
 // addObject();
-// addBatch();
+addBatch();
 // getall();
 
 // (async () => {
