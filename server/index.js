@@ -4,6 +4,8 @@ dotenv.config();
 
 const checkTranscript = require("./controllers/checkTranscript");
 const createTranscript = require("./controllers/createTranscript");
+const express = require("express");
+const { createDBQAchain, getAnswer } = require("./controllers/DBQAchain");
 
 //importing the weaviate functions
 const {
@@ -21,7 +23,7 @@ mongoconnect();
 const client = require("./connect/weaviate");
 const youtubeURL = "https://www.youtube.com/watch?v=oL1uem6-3m4";
 const path = "E:\\Coding\\Web\\SuperAssistant\\server\\assets\\service.mp3";
-const className = "Finalpara";
+const className = "Test7";
 //checking if the transcript exists
 (async () => {
    const isTranscript = await checkTranscript(youtubeURL);
@@ -46,8 +48,7 @@ const className = "Finalpara";
 })();
 
 //setting up express server
-const express = require("express");
-const { createDBQAchain, getAnswer } = require("./controllers/DBQAchain");
+
 const app = express();
 const PORT = 4000;
 app.listen(PORT);
@@ -55,19 +56,18 @@ app.listen(PORT);
 //setting up middlewares
 app.use(express.json());
 app.use((req, res, next) => {
-   console.log(req.method + ":" + req.url + "\n");
+   console.log(req.method + ":" + req.url);
    next();
 });
 app.get("/", (req, res) => {
    res.send("Hello from the express server");
 });
-
 app.post("/query", async (req, res) => {
-   const dbqachain = await createDBQAchain(className, "content");
+   const dbqachain = await createDBQAchain(className, "content"); //TODO : Not create a new dbqachain on every request.
    const { question } = req.body;
    const answer = await getAnswer(dbqachain, question);
    res.status(200).json({
       answer: answer,
-      status: res.statusCode
+      status: res.statusCode,
    });
 });
