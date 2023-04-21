@@ -7,11 +7,12 @@ const { OpenAI } = require("langchain/llms/openai");
 const { OpenAIEmbeddings } = require("langchain/embeddings/openai");
 const client = weaviate.client({
    scheme: "https",
-   host: "superassistant-fq1yuyzh.weaviate.network",
+   host: "transcripts-0107kdc1.weaviate.network",
+   headers: { "X-OpenAI-Api-Key": process.env.OPENAI_API_KEY },
 });
 
 let classObj = {
-   class: "Temp0",
+   class: "Paragraph",
    description: "A paragraph from the video transcript",
    vectorizer: "text2vec-openai",
    moduleConfig: {
@@ -56,7 +57,7 @@ const create = () => {
 const getter = () => {
    client.schema
       .classGetter()
-      .withClassName("paragraph")
+      .withClassName("Paragraph")
       .do()
       .then((res) => {
          console.log(res);
@@ -69,7 +70,7 @@ const getter = () => {
 const getall = () => {
    client.graphql
       .aggregate()
-      .withClassName("Temp0")
+      .withClassName("Paragraph")
       .withFields("meta { count }")
       .do()
       .then((res) => {
@@ -104,7 +105,7 @@ const addBatch = async () => {
    const splitted_text = await split(transcript);
    const batch = splitted_text.map((content, index) => {
       return {
-         class: "Temp0",
+         class: "Paragraph",
          properties: {
             content: content,
          },
@@ -120,7 +121,7 @@ const addBatch = async () => {
       .do()
       .then((res) => {
          console.log(res);
-         getall();
+         // getall();
       })
       .catch((err) => {
          console.error(err);
@@ -128,26 +129,35 @@ const addBatch = async () => {
 };
 
 const createVectorStore = async () => {
-   const embedder = new OpenAIEmbeddings(process.env.OPENAIN_API_KEY);
+   const embedder = new OpenAIEmbeddings(process.env.OPENAI_API_KEY);
    vectorstore = new WeaviateStore(embedder, {
       client: client,
-      indexName: "Temp0",
+      indexName: "Paragraph",
       textKey: "content",
    });
    // console.log(vectorstore);
    const myOpenAI = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
    });
-   const qa = ChatVectorDBQAChain.fromLLM(myOpenAI, vectorstore);
-   query = "How to strum";
-   // docs = qa()
-   const res = await (qa._call({ question: query, chat_history: [] }));
-   console.log(res);
+   const dbqachain = ChatVectorDBQAChain.fromLLM(myOpenAI, vectorstore);
+   const query = "what is the name of person speaking?";
+   const answer = await dbqachain._call({ question: query, chat_history: [] })
+   console.log(answer)
+   return dbqachain
+};
+
+const getAnswer = async (dbqachain, query) => {
+   const res = await dbqachain._call({ question: query, chat_history: [] });
+   console.log(res.text);
+   return res.text;
 };
 ////////////////////
 
 // getSchema();
+// create()
 // addObject();
 // addBatch();
 // getall();
-createVectorStore();
+const mychain = createVectorStore();
+// const query = "What is a linkedlist";
+// getAnswer(mychain, query);
