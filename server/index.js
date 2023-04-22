@@ -50,7 +50,7 @@ const className = "Test7";
 //setting up express server
 
 const app = express();
-const PORT = 4000;
+const PORT = 8080;
 app.listen(PORT);
 
 //setting up middlewares
