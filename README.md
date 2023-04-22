@@ -35,3 +35,16 @@ Link to deployed Website on Google Cloud Platform [SuperAssistant](https://super
 1. This api is used in our React frontend which provides a simple UI to interact with the application.
 
 ## What i learnt from?
+During the development of SuperAssistant, I gained knowledge and experience in several areas. These include:
+
+
+1.MERN Stack: I learned how to use the MERN (MongoDB, Express.js, React.js, Node.js) stack to build web applications. I gained a good understanding of how the stack works, its advantages, and disadvantages. I also learned how to use TailwindCSS as a CSS utility.
+1. Integration of OpenAI APIs: I learned how to integrate OpenAI APIs for natural language processing and how to use them to provide answers to users' questions based on a given YouTube video. I gained experience in using OpenAI's ChatVectorDBQAchain and how it works with Weaviate as the VectorDatabase.
+1. Weaviate: I gained knowledge about using Weaviate as a VectorDatabase and how it works with OpenAI's embedder and ChatVectorDBQAchain.
+1. Langchain: I learned how to use Langchain framework to interact with OpenAI APIs and VectorStores. I used Langchain's RecursiveCharacterTextSplitter to split transcripts into chunks and create objects for the VectorDatabase.
+1. API Development: I gained experience in developing APIs using Express.js and Node.js. I learned how to create endpoints, handle requests and responses, and use middleware functions. I also learned how to use Postman for API testing.
+1. Chatbot Development: I gained knowledge about how chatbots work and how they can be used to provide answers to user queries. I learned how to use OpenAI's ChatVectorDBQAchain to generate answers based on user queries.
+1. Development Workflow: I learned how to use Git for version control and collaboration with other developers. I gained experience in using Github and managing pull requests. I also learned how to deploy the project on Google Cloud Platform.
+
+
+Overall, this project provided me with valuable experience in building a chatbot using the MERN stack, integrating OpenAI APIs, and developing APIs. I gained a deeper understanding of how these technologies work together to create a functional web application.
