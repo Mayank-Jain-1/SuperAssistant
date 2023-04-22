@@ -1,23 +1,23 @@
 import { useState } from "react";
 import QuestionInput from "./QuestionInput";
 import AskButton from "./AskButton";
-import axios from 'axios'
+import axios from "axios";
 
 const QuestionArea = ({ className }) => {
    const [question, setQuestion] = useState("");
-   const [answer, setAnswer] = useState("")
+   const [answer, setAnswer] = useState("");
 
    const handleAsk = async () => {
-      setAnswer('Getting your answer...');
-      const res = await axios.post('https://api-dot-superassisstant.uc.r.appspot.com/', {
-         question: question
-      })
-      if(res.data.status === 200){
+      setAnswer("Getting your answer...");
+      const res = await axios.post("/api/query", {
+         question: question,
+      });
+      if (res.data.status === 200) {
          setAnswer(res.data.answer);
-      }else{
-         setAnswer("Was Not able to get your answer please try again.")
+      } else {
+         setAnswer("Was Not able to get your answer please try again.");
       }
-   }
+   };
    return (
       <div className={`${className} my-4`}>
          <h2 className="text-4xl text-thistle text-center">
@@ -29,9 +29,12 @@ const QuestionArea = ({ className }) => {
                question={question}
                setQuestion={setQuestion}
             />
-            <AskButton onClick={handleAsk}/>
+            <AskButton onClick={handleAsk} />
          </div>
-         <p className="p-3 text-thistle text-2xl font-semibold">{">>"}{answer}</p>
+         <p className="p-3 text-thistle text-2xl font-semibold">
+            {">>"}
+            {answer}
+         </p>
       </div>
    );
 };
