@@ -9,7 +9,7 @@ const QuestionArea = ({ className }) => {
 
    const handleAsk = async () => {
       setAnswer('Getting your answer...');
-      const res = await axios.post('/api/query', {
+      const res = await axios.post('https://api-dot-superassisstant.uc.r.appspot.com/', {
          question: question
       })
       if(res.data.status === 200){
