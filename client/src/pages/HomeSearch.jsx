@@ -24,7 +24,7 @@ const HomeSearch = () => {
          <div className="w-full flex flex-col items-center my-5">
             <div className="w-full max-w-7xl p-3 md:p-5">
                <DescriptionArea description={description} videoURL={videoURL} />
-               <QuestionArea />
+               <QuestionArea className="my-5"/>
             </div>
          </div>
       </div>

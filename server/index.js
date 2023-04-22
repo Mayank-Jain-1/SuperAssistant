@@ -17,7 +17,6 @@ const {
 
 //making connection wtih mongodb
 const mongoconnect = require("./connect/mongo");
-mongoconnect();
 
 //making connection to weaviate
 const client = require("./connect/weaviate");
@@ -26,6 +25,7 @@ const path = "E:\\Coding\\Web\\SuperAssistant\\server\\assets\\service.mp3";
 const className = "Test7";
 //checking if the transcript exists
 (async () => {
+   await mongoconnect();
    const isTranscript = await checkTranscript(youtubeURL);
    if (isTranscript)
       console.log("Transcript for this youtube video found in MongoDB");
@@ -59,10 +59,10 @@ app.use((req, res, next) => {
    console.log(req.method + ":" + req.url);
    next();
 });
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
    res.send("Hello from the express server");
 });
-app.post("/query", async (req, res) => {
+app.post("/api/query", async (req, res) => {
    const dbqachain = await createDBQAchain(className, "content"); //TODO : Not create a new dbqachain on every request.
    const { question } = req.body;
    const answer = await getAnswer(dbqachain, question);
