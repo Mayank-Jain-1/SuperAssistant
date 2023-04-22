@@ -54,7 +54,7 @@ const PORT = 8080;
 app.listen(PORT);
 
 //Setting up front end
-app.use(express.static(`${__dirname}/../client/dist`))
+app.use(express.static(`${__dirname}/dist`))
 
 //setting up middlewares
 app.use(express.json());

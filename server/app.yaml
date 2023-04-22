@@ -1,3 +1,13 @@
 runtime: nodejs16
 
-service: api
+handlers:
+- url: /api/.*
+  script: auto
+
+- url: /(.*\.(js|css|svg|png|jpg|jpeg|gif|ico|json|txt|html|woff2))$
+  static_files: dist/\1
+  upload: dist/(.*\.(js|css|svg|png|jpg|jpeg|gif|ico|json|txt|html|woff2))$
+
+- url: /.*
+  static_files: dist/index.html
+  upload: dist/index.html
