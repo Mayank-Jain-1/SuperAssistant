@@ -21,7 +21,7 @@ const mongoconnect = require("./connect/mongo");
 //making connection to weaviate
 const client = require("./connect/weaviate");
 const youtubeURL = "https://www.youtube.com/watch?v=oL1uem6-3m4";
-const path = "E:\\Coding\\Web\\SuperAssistant\\server\\assets\\service.mp3";
+const path = __dirname + "\\assets\\service.mp3";
 const className = "Test7";
 //checking if the transcript exists
 (async () => {
